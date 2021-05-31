@@ -5,7 +5,7 @@
         <PostCard/>
         <PostCard/>
         <PostCard/>
-        <PagingFooter class="paging-footer"/>
+        <PagingFooter class="paging-footer" v-bind="pagingFooterParams"/>
   </div>
 </template>
 
@@ -17,8 +17,16 @@ export default {
     components: {
         PostCard,
         PagingFooter
+    },
+    data: function() {
+    return {
+      pagingFooterParams: {
+          total: 20,
+          count: 5,
+          current: 1
+      }
     }
-
+  }
 }
 </script>
 
