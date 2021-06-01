@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <Header/>
-    <Login class="page dev-hidden"/>
-    <PostList class="page"/>
+    <router-view />
     <Footer class="footer dev-hidden"/>
   </div>
 </template>
@@ -10,16 +9,12 @@
 <script>
 import Header from './components/includes/Header.vue'
 import Footer from './components/includes/Footer.vue'
-import Login from './views/Login.vue'
-import PostList from './views/PostList.vue'
 
 export default {
   name: 'App',
   components: {
     Header,
-    Footer,
-    Login,
-    PostList
+    Footer
   }
 }
 </script>

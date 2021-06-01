@@ -16,14 +16,11 @@
             <!-- 메뉴 -->
             <div class="collapse navbar-collapse" id="navbarMenu">
                 <ul class="navbar-nav">
-                    <!-- <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li> -->
                     <li class="nav-item">
-                    <a class="nav-link" href="#">Login</a>
+                        <router-link class="nav-link" to="/login">Login</router-link>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#">Posts</a>
+                        <router-link class="nav-link" to="/">Posts</router-link>
                     </li>
                     <!-- <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
