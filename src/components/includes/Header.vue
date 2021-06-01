@@ -60,8 +60,8 @@
                         <div class="row" style="color: white;">
                             <!-- 정렬순서 icon -->
                             <div class="col-1 search-form">
-                                <i class="bi bi-sort-numeric-up search-icon" id="sort-asc" style="display: none;"></i>
-                                <i class="bi bi-sort-numeric-down search-icon" id="sort-desc"></i>
+                                <i class="bi bi-sort-numeric-up search-icon" :class="{'search-hidden': isSortUpHidden}"></i>
+                                <i class="bi bi-sort-numeric-down search-icon" :class="{'search-hidden': isSortDownHidden}"></i>
                             </div>
                             <!-- 정렬 순서 -->
                             <div class="col-5 search-form">
@@ -99,23 +99,33 @@
 
 <script>
 export default {
-  name: 'app-header',
-  props: {
+    name: 'app-header',
+    props: {
     msg: String
-  },
-  methods: {
-      changeIcon: function(event) {
-          var elem = event.target;
+    },
+    data() {
+        return {
+            isSortUpHidden: false,  // 정렬 순서 오래된순 hidden 여부(asc)
+            isSortDownHidden: false // 정렬 순서 최신순 hidden 여부(desc)
+        }
+    },
+    methods: {
+        changeIcon: function(event) {
+            var value = event.target.value;
 
-          if (elem.value == 'desc') {
-              document.getElementById('sort-asc').style.display="none";
-              document.getElementById('sort-desc').style.display="inline";
-          } else {
-              document.getElementById('sort-asc').style.display="inline";
-              document.getElementById('sort-desc').style.display="none";
-          }
-      }
-  }
+            if (value == 'desc') {
+                this.isSortDownHidden = true;
+                this.isSortUpHidden = false;
+            } else {
+                this.isSortDownHidden = false;
+                this.isSortUpHidden = true;
+            }
+        }
+    },
+    created() {
+        this.isSortUpHidden = true;
+        this.is
+    }
 }
 </script>
 
@@ -141,6 +151,10 @@ export default {
 
 .search-icon {
     font-size: 20px;
+}
+
+.search-hidden {
+    display: none;
 }
 
 .left-margin {
