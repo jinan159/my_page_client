@@ -36,28 +36,28 @@ export default {
 
 <style>
 .login-form {
-    border: 1px solid rgb(200, 200, 200);
-    border-radius: 10px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 15px;
-    margin-top: -112px;
-    margin-left: -170px;
-    width: 340px;
-    height: 280px;
-    text-align: left;
-  }
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 15px;
+  margin-top: -112px;
+  margin-left: -170px;
+  width: 340px;
+  height: 280px;
+  text-align: left;
+}
 
-  .login-form-center {
-    text-align: center;
-  }
+.login-form-center {
+  text-align: center;
+}
 
-  .login-form-left {
-    text-align: left;
-  }
+.login-form-left {
+  text-align: left;
+}
 
-  .login-form-right {
-    text-align: right;
-  }
+.login-form-right {
+  text-align: right;
+}
 </style>
