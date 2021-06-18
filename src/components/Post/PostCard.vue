@@ -5,14 +5,14 @@
                 <div class="row g-0">
                 <div class="col-md-4">
                     <div class="image-grid-row">
-                        <img class="image-grid-col" src="../../assets/images/Docker.png" alt="...">
-                        <img class="image-grid-col" src="../../assets/images/Docker.png" alt="...">
-                        <img class="image-grid-col" src="../../assets/images/Docker.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/node.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/mysql.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/node.png" alt="...">
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                    <h5 class="card-title">제목 : {{post.title}}</h5>
+                    <h5 class="card-title">제목 : {{post.title}} <span class="badge bg-secondary" v-if="new Date(post.start_date) > beforeOneWeek">New</span></h5>
                     <p class="card-text" v-if="post.start_date === post.end_date"><small class="text-muted">Date : {{post.start_date}}</small></p>
                     <p class="card-text" v-else><small class="text-muted">Date : {{post.start_date}} ~ {{post.end_date}}</small></p>
                     <p class="card-text">{{post.content}}</p>
@@ -33,10 +33,11 @@ export default {
     },
     data() {
         return {
-            
+            beforeOneWeek: utils.dateUtils.addDays(new Date(), -7)
         }
     },
     computed: {
+        
         formatted_postCardProps: function(){
             var arr = this.postCardProps;
             if (arr.length && arr.length > 0) {
@@ -60,12 +61,12 @@ export default {
     margin: 20px 0;
 }
 
-.image-grid-row {
+.post-card .image-grid-row {
     display: flex;
     flex-wrap: wrap;
     padding: 0 4px;
 }
-img.image-grid-col {
+.post-card img.image-grid-col {
     flex: 47%;
     border: 1px solid black;
     padding: 0 4px;

@@ -2,19 +2,25 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import PostList from '../views/PostList.vue'
+import Write from '../views/Write.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'PostList',
+    name: 'postList',
     component: PostList
   },
   {
-    path: '/Login',
-    name: 'Login',
+    path: '/login',
+    name: 'login',
     component: Login
+  },
+  {
+    path: '/write',
+    name: 'write',
+    component: Write
   }
 ]
 

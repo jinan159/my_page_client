@@ -19,6 +19,9 @@
                     <li class="nav-item">
                         <router-link class="nav-link" to="/">Posts</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/write">Write</router-link>
+                    </li>
                     <!-- <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                     </li> -->

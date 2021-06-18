@@ -143,7 +143,13 @@ export default {
         searchPage: function(value) {
             if (value) this.paging.current = value;
             
-            var start = (this.pagingProps.count * this.paging.current) - this.pagingProps.count; // 조회 파라미터 설정
+            var start = 0;
+            
+            if (this.pagingProps.count > 0 && this.paging.current > 0) {
+                console.log('pagingFooter - searchPage method');
+                start = (this.pagingProps.count * this.paging.current) - this.pagingProps.count; // 조회 파라미터 설정
+            }
+            
             this.$emit("pageClick", start);
         }
     },
@@ -162,7 +168,6 @@ export default {
                 
                 // 글 수가 0인 경우 바로 리턴
                 if (this.paging.totalCount == 0) return;
-                if (typeof(newData.current) == typeof(String)) console.log("true true")
 
                 // 페이지 수 제한
                 if (newData.current < 1) this.paging.current = 1;

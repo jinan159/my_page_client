@@ -90,29 +90,29 @@ export default {
         PagingFooter
     },
     data() {
-      return {
-        start_date: '',   // 조회 시작일자
-        end_date: '',     // 조회 종료일자
-        sort: '',         // 정렬 순서
-        sort_text: '',    // 정렬 순서 텍스트
-        sort_asc_text: '',
-        sort_desc_text: '',
-        // PagingFooter props
-        start: 0,
-        count: 0,
-        
-        isSortUpHidden: false,      // 정렬 순서 오래된순 hidden 여부(asc)
-        isSortDownHidden: false,    // 정렬 순서 최신순 hidden 여부(desc)
-        isSearchFormHidden: false,  // 검색 form 및
-
-        //PostCard props
-        postCardProps: [],
-        pagingProps: {
-            total: 0,
+        return {
+            start_date: '',   // 조회 시작일자
+            end_date: '',     // 조회 종료일자
+            sort: '',         // 정렬 순서
+            sort_text: '',    // 정렬 순서 텍스트
+            sort_asc_text: '',
+            sort_desc_text: '',
+            // PagingFooter props
+            start: 0,
             count: 0,
-            current: 0
+
+            isSortUpHidden: false,      // 정렬 순서 오래된순 hidden 여부(asc)
+            isSortDownHidden: false,    // 정렬 순서 최신순 hidden 여부(desc)
+            isSearchFormHidden: false,  // 검색 form 및
+
+            //PostCard props
+            postCardProps: [],
+            pagingProps: {
+                total: 0,
+                count: 0,
+                current: 0
+            }
         }
-      }
     },
     methods: {
         // 정렬 순서에 따라 아이콘 변경
@@ -143,18 +143,15 @@ export default {
                 
                 // PagingFooter 초기화
                 if (response) {
-                    this.postCardProps = response.data.result;
-                    this.pagingProps.total = response.data.cnt[0].count;
-                    
-                    console.log(this.postCardProps);
-                    console.log(this.pagingProps.total);
+                    this.postCardProps = response.data.page.result;
+                    this.pagingProps.total = response.data.cnt.result[0].count;
                 } else {
                     this.pagingProps.total = 0;          // 글 전체 개수
                 }
 
                 if (this.pagingProps.current == 0) this.pagingProps.current = 1;
             }).catch((e)=>{
-                console.log(e);
+                console.error(e);
             });
         },
         searchPage: function(value) {
