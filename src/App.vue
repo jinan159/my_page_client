@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <Header/>
+    <Header class="fix-top"/>
     <router-view />
     <Footer class="footer dev-hidden"/>
   </div>
 </template>
 
 <script>
+// TODO: vue-bootstrap으로 변경
 import Header from './components/includes/Header.vue'
 import Footer from './components/includes/Footer.vue'
 
@@ -31,6 +32,14 @@ export default {
   width: 100%;
   height: 100%;
   padding-bottom: 0;
+}
+
+.fix-top {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
 }
 
 .footer {

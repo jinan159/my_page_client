@@ -1,16 +1,21 @@
 <template>
     <div>
-        <div class="container-fluid post-card">
+        <div class="container-fluid post-card" v-for="post in formatted_postCardProps" :key="post.id">
             <div class="card mb-3">
                 <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="../../assets/images/Docker.png" alt="...">
+                    <div class="image-grid-row">
+                        <img class="image-grid-col" src="../../assets/images/Docker.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/Docker.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/Docker.png" alt="...">
+                    </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                    <h5 class="card-title">이것은 제목입니다</h5>
-                    <p class="card-text"><small class="text-muted">Date : 2021-05-21 ~ 2021-05-27</small></p>
-                    <p class="card-text">이것을 얼음 속에서 불러 내는 것이 따뜻한 봄바람이다 인생에 따뜻한 봄바람을 불어 보내는 것은 청춘의 끓는 피다 청춘의 피가 뜨거운지라 인간의 동산에는 사랑의 풀이 돋고 이상의 꽃이 피고 희망의 놀이 뜨고 열락의이것을 얼음 속에서 불러 내는 것이 따뜻한 봄바람이다 이것을 얼음 속에서 불러 내는 것이 따뜻한 봄바람이다 인생에 따뜻한 봄바람을 불어 보내는 것은 청춘의 끓는 피다 청춘의 피가 뜨거운지라 인간의 동산에는 사랑의 풀이 돋고 이상의 꽃이 피고 희망의 놀이 뜨고 열락의이것을 얼음 속에서 불러 내는 것이 따뜻한 봄바람이다 인생에 </p>
+                    <h5 class="card-title">제목 : {{post.title}}</h5>
+                    <p class="card-text" v-if="post.start_date === post.end_date"><small class="text-muted">Date : {{post.start_date}}</small></p>
+                    <p class="card-text" v-else><small class="text-muted">Date : {{post.start_date}} ~ {{post.end_date}}</small></p>
+                    <p class="card-text">{{post.content}}</p>
                     </div>
                 </div>
                 </div>
@@ -20,16 +25,51 @@
 </template>
 
 <script>
+import utils from '../../utils/utils'
 export default {
-  name: 'postCard',
-  props: {
-    msg: String
-  }
+    name: 'postCard',
+    props: {
+        postCardProps: Array,
+    },
+    data() {
+        return {
+            
+        }
+    },
+    computed: {
+        formatted_postCardProps: function(){
+            var arr = this.postCardProps;
+            if (arr.length && arr.length > 0) {
+                for(var i in arr) {
+                    arr[i].start_date = utils.dateUtils.getFormattedDateString('YYYY-MM-DD', new Date(arr[i].start_date));
+                    arr[i].end_date = utils.dateUtils.getFormattedDateString('YYYY-MM-DD', new Date(arr[i].end_date));
+                }
+            }
+
+            return arr;
+        }
+    },
+    created() {
+        console.log("[PostCard] - created() : this.postCardProps : ", this.postCardProps);
+    }
 }
 </script>
 
 <style>
-.post-card{
+.post-card {
     margin: 20px 0;
+}
+
+.image-grid-row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+img.image-grid-col {
+    flex: 47%;
+    border: 1px solid black;
+    padding: 0 4px;
+    margin: 4px;
+    width: 47%;
 }
 </style>
