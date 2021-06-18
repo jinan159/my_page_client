@@ -86,15 +86,26 @@
                 <!-- 초기화, 저장 버튼 -->
                 <div class="row">
                     <div class="col-6  write-form-label">
-                        <button type="button" class="btn btn-outline-secondary">초기화</button>
+                        <button type="button" class="btn btn-outline-secondary" @click="reset">초기화</button>
                     </div>
                     <div class="col-6 write-form-submit">
                         <button type="button" class="btn btn-success" @click="savePost">저장</button>
                     </div>
                 </div>
+                <!-- Toast 메세지(기본값:hide) -->
+                <div class="position-fixed bottom-0 end-0 write-form-toast" style="z-index: 5">
+                    <div id="liveToast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body" :class="{'alert alert-success': toast.isSuccess, 'alert alert-danger': toast.isDanger}">
+                            <i v-if="toast.isSuccess" class="bi bi-check-circle" style="margin-right: 5px;"></i>
+                            <i v-if="toast.isDanger" class="bi bi-x-circle" style="margin-right: 5px;"></i>
+                            {{toast.message}}
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
+    
 </template>
 
 <script>
@@ -113,6 +124,14 @@ export default {
             end_date: '',
             content: '',
             writer: 'jwkim',
+
+            // toast
+            toast: {
+                isSuccess: false,
+                isDanger: false,
+                time: 0,
+                message: ''
+            }
         }
     },
     methods: {
@@ -120,7 +139,66 @@ export default {
             // 기간설정이 아닌경우 start_date = end_date
             if (!this.isTerm) this.end_date = this.start_date;
         },
+        successToast(message, time, timeout) {
+            this.toast.isSuccess = true;
+            this.toast.isDanger = false;
+
+            this.showToast(message, time, timeout);
+        },
+        failToast(message, time, timeout) {
+            this.toast.isSuccess = false;
+            this.toast.isDanger = true;
+
+            this.showToast(message, time, timeout);
+        },
+        showToast(message, time, timeout) {
+
+            this.toast.message = message;
+            this.toast.time = time;
+
+            var toastElem = document.getElementById('liveToast');
+            toastElem.classList.remove('hide');
+            toastElem.classList.add('show');
+
+            // 토스트 메세지 자동종료
+            setTimeout(function() {
+                toastElem.classList.remove('show');
+                toastElem.classList.add('hide');
+            }, timeout);
+        },
+        reset() {
+            this.title = '';
+            this.start_date = '';
+            this.end_date = '';
+            this.content = '';
+        },
         savePost() {
+
+            // 입력값 검증
+            // 제목 검증
+            if (!this.title) {
+                this.failToast('제목을 입력해 주세요.', '', 2000);
+                return;
+            }
+
+            // 날짜 검증
+            if (!this.start_date) {
+                if (this.isTerm) this.failToast('시작일자를 입력해 주세요.', '', 2000);
+                else this.failToast('일자를 입력해 주세요.', '', 2000);
+                return;
+            }
+
+            if (this.isTerm && !this.end_date) {
+                this.failToast('종료일자를 입력해 주세요.', '', 2000);
+                return;
+            }
+
+            // 날짜 검증
+            if (new Date(this.start_date) > new Date(this.end_date)) {
+                this.failToast('시작일자가 종료일자보다 클 수 없습니다.', '', 2000);
+                return;
+            }
+
             axios.post(this.$base_url + '/post', {
                 title: this.title,
                 writer: this.writer,
@@ -131,8 +209,14 @@ export default {
             .then((response) => {
                 
                 // PagingFooter 초기화
-                if (response.result && response.result.affectedRows > 0) {
-                    console.log('insertId : ', response.result.insertId);
+                console.log(response);
+                console.log(response.data.result);
+                if (response.data.result && response.data.result.affectedRows > 0) {
+                    console.log('insertId : ', response.data.result.insertId);
+
+                    // 토스트 메세지 띄우기
+                    this.successToast('글이 저장되었습니다.', '방금 전', 5000);
+                    this.reset();
                 }
             }).catch((e)=>{
                 console.error(e);
@@ -197,5 +281,13 @@ export default {
     width: 23%;
     max-width: 100px;
     max-height: 100px;
+}
+@media (min-width: 400px) {
+    .write-form-toast {
+        padding: 20px !important;
+    }
+}
+.write-form-toast {
+    padding: 4px;
 }
 </style>
