@@ -56,21 +56,18 @@
                 <div class="row write-form-row">
                     <div class="col-9 write-form-no-pad">
                         <div class="mb-3">
-                            <input class="form-control form-control-sm" id="formFileSm" type="file">
+                            <input class="form-control form-control-sm" id="formFileSm" accept=".jpg, .png, .gif" type="file" @change="onChangeFile">
                         </div>
                     </div>
                     <div class="col-3 write-form-no-pad-right">
-                        <button type="button" class="btn btn-success btn-sm" style="width: 100%;">선 택</button>
+                        <button type="button" class="btn btn-success btn-sm" style="width: 100%;" @click="onClickAddFile">추 가</button>
                     </div>
                 </div>
                 <!-- 이미지 그리드 -->
                 <div class="row">
                     <div class="col-12 image-grid">
                         <div class="image-grid-row">
-                            <img class="image-grid-col" src="../assets/images/Docker.png" alt="...">
-                            <img class="image-grid-col" src="../assets/images/DBeaver.png" alt="...">
-                            <img class="image-grid-col" src="../assets/images/mysql.png" alt="...">
-                            <img class="image-grid-col" src="../assets/images/node.png" alt="...">
+                            <img v-for="img in images" :key="img.temp_id" class="image-grid-col" :src="img.imageUrl" alt="..." @click="onClickImagePreview(img.temp_id)">
                         </div>
                     </div>
                 </div>
@@ -124,6 +121,10 @@ export default {
             end_date: '',
             content: '',
             writer: 'jwkim',
+
+            // image 맵(key: Number, value: String)
+            imageMap: new Map(),
+            images: [],
 
             // toast
             toast: {
@@ -204,7 +205,7 @@ export default {
                 writer: this.writer,
                 content: this.content,
                 start_date: this.start_date,
-                end_date: this.end_date             
+                end_date: this.end_date          
             })
             .then((response) => {
                 
@@ -221,6 +222,36 @@ export default {
             }).catch((e)=>{
                 console.error(e);
             });
+        },
+        onChangeFile(e) {
+            console.log(e.target.files);
+            if (e.target.files.length > 0) {
+                
+                var imageUrl = URL.createObjectURL(e.target.files[0]);
+                var temp_id = this.imageMap.size;
+                
+                console.log("temp_id : ", temp_id);
+                console.log("imageUrl : ", imageUrl);
+
+                this.imageMap.set(temp_id, imageUrl);
+            }
+        },
+        onClickAddFile() {
+            this.images = [];
+            this.imageMap.forEach((value, key, map) => {
+                console.log(map);
+                this.images.push({imageUrl: value, temp_id: key});
+            });
+        },
+        onClickImagePreview(temp_id) {
+            if (confirm('삭제하시겠습니까?') && this.imageMap.has(temp_id)) {
+                this.imageMap.delete(temp_id);
+                this.images = [];
+                this.imageMap.forEach((value, key, map) => {
+                    console.log(map);
+                    this.images.push({imageUrl: value, temp_id: key});
+                });
+            }
         }
     },
     watch: {
@@ -231,7 +262,18 @@ export default {
         start_date() {
             // 기간설정이 아닌경우 start_date = end_date
             this.setIsTermDate();
-        }
+        },
+    },
+    computed: {
+        // images() {
+        //     var arr = [];
+        //     for(var key in this.imageMap.keys()) {
+        //         var url = this.imageMap.get(key);
+        //         arr.push({imageUrl: url, temp_id: key});
+        //     }
+
+        //     return arr;
+        // }
     },
 }
 </script>
@@ -275,7 +317,8 @@ export default {
 }
 .write-form img.image-grid-col {
     flex: 23%;
-    border: 1px solid black;
+    border: 1px solid rgb(70, 70, 70);
+    border-radius: 5px;
     padding: 0 2px;
     margin: 2px;
     width: 23%;
