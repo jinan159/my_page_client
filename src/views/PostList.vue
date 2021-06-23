@@ -1,71 +1,76 @@
 <template>
   <div>
     <div style="margin-top: 20px; padding: 0 10px; width: 100%;">
-      <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
-        검색 : {{start_date}} ~ {{end_date}}<br>
-        {{sort_text}}, {{count}}
-      </button>
-      <div class="collapse" id="collapseExample" style="margin-top: 5px;">
-        <div class="card card-body">
-          <ul class="navbar-nav">
-            <!-- 조회기간 -->
-            <li class="nav-item">
+        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
+            검색 : {{start_date}} ~ {{end_date}}<br>
+            {{sort_text}}, {{count}}
+        </button>
+        <div class="collapse" id="collapseExample" style="margin-top: 5px;">
+            <div class="card card-body">
+                <!-- 조회기간 -->
                 <div class="row">
-                    <!-- 조회기간 icon -->
-                    <div class="col-1 search-form">
-                        <i class="bi bi-calendar-range search-icon"></i>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <!-- 조회기간 icon -->
+                            <div class="col-1 search-form">
+                                <i class="bi bi-calendar-range search-icon"></i>
+                            </div>
+                            <!-- 시작일 -->
+                            <div class="col-5 search-form">
+                                <input type="date" class="search-item" id="inputStartDate" v-model="start_date">
+                            </div>
+                            <div class="col-1" style="padding: 0 5px 0 0;">
+                                <span> ~ </span>
+                            </div>
+                            <!-- 종료일 -->
+                            <div class="col-5 search-form">
+                                <input type="date" class="search-item" id="inputEndDate" v-model="end_date">
+                            </div>
+                        </div>
                     </div>
-                    <!-- 시작일 -->
-                    <div class="col-5 search-form">
-                        <input type="date" class="search-item" id="inputStartDate" v-model="start_date">
-                    </div>
-                    <div class="col-1" style="padding: 0 5px 0 0;">
-                        <span> ~ </span>
-                    </div>
-                    <!-- 종료일 -->
-                    <div class="col-5 search-form" style="padding-left: 5px;">
-                        <input type="date" class="search-item" id="inputEndDate" v-model="end_date">
+                    <div class="col-md-6 search-form-broke">
+                        <div class="row">
+                            <!-- 정렬순서 icon -->
+                            <div class="col-1 search-form">
+                                <i class="bi bi-sort-numeric-up search-icon" :class="{'search-hidden': isSortUpHidden}"></i>
+                                <i class="bi bi-sort-numeric-down search-icon" :class="{'search-hidden': isSortDownHidden}"></i>
+                            </div>
+                            <!-- 정렬 순서 -->
+                            <div class="col-5 search-form">
+                                <select class="form-select search-item" @change="changeIcon" v-model="sort">
+                                    <option value="desc">{{sort_desc_text}}</option>
+                                    <option value="asc">{{sort_asc_text}}</option>
+                                </select>
+                            </div>
+                            <!-- 조회 개수 icon -->
+                            <div class="col-1 search-form" >
+                                <i class="bi bi-list-ol search-icon"></i>
+                            </div>
+                            <!-- 조회 개수 -->
+                            <div class="col-5 search-form">
+                                <select class="form-select search-item" v-model="count">
+                                    <option value="5">5개씩</option>
+                                    <option value="10">10개씩</option>
+                                    <option value="20">20개씩</option>
+                                    <option value="-1">전체보기</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </li>
-            <hr>
-            <!-- 조회 옵션 -->
-            <li class="nav-item left-margin">
+                <hr>
+                <!-- 검색 버튼 -->
                 <div class="row">
-                    <!-- 정렬순서 icon -->
-                    <div class="col-1 search-form">
-                        <i class="bi bi-sort-numeric-up search-icon" :class="{'search-hidden': isSortUpHidden}"></i>
-                        <i class="bi bi-sort-numeric-down search-icon" :class="{'search-hidden': isSortDownHidden}"></i>
+                    <div class="col-3"> </div>
+                    <div class="col-6">
+                        <div class="spinner-border" role="status" v-if="isSearching">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <button v-if="!isSearching" type="button" class="btn btn-dark" style="width: 100%; height: 30px; max-width: 100px; padding-top:3px;" @click="searchPost">검색</button>
                     </div>
-                    <!-- 정렬 순서 -->
-                    <div class="col-5 search-form">
-                        <select class="form-select search-item" @change="changeIcon" v-model="sort">
-                            <option value="desc">{{sort_desc_text}}</option>
-                            <option value="asc">{{sort_asc_text}}</option>
-                        </select>
-                    </div>
-                    <!-- 조회 개수 icon -->
-                    <div class="col-1 search-form" >
-                        <i class="bi bi-list-ol search-icon"></i>
-                    </div>
-                    <!-- 조회 개수 -->
-                    <div class="col-5 search-form">
-                        <select class="form-select search-item" v-model="count">
-                            <option value="5">5개씩</option>
-                            <option value="10">10개씩</option>
-                            <option value="20">20개씩</option>
-                            <option value="-1">전체보기</option>
-                        </select>
-                    </div>
+                    <div class="col-3"> </div>
                 </div>
-            </li>
-            <hr>
-            <!-- 검색 버튼 -->
-            <li class="nav-item left-margin">
-                <button type="button" class="btn btn-dark" style="width: 100%; height: 30px; padding-top:3px;" @click="searchPost">검색</button>
-            </li>
-          </ul>
-        </div>
+            </div>
       </div>
     </div>
     <PostCard :postCardProps="postCardProps"/>
@@ -101,6 +106,8 @@ export default {
             start: 0,
             count: 0,
 
+            isSearching: false, // 조회 중인지 여부
+
             isSortUpHidden: false,      // 정렬 순서 오래된순 hidden 여부(asc)
             isSortDownHidden: false,    // 정렬 순서 최신순 hidden 여부(desc)
             isSearchFormHidden: false,  // 검색 form 및
@@ -128,6 +135,8 @@ export default {
             }
         },
         searchPost: function() {
+            this.isSearching = true;
+
             var req_params = {
                 start: this.start,
                 sort: this.sort,
@@ -141,17 +150,23 @@ export default {
             })
             .then((response) => {
                 
-                // PagingFooter 초기화
-                if (response) {
-                    this.postCardProps = response.data.page.result;
-                    this.pagingProps.total = response.data.cnt.result[0].count;
-                } else {
-                    this.pagingProps.total = 0;          // 글 전체 개수
-                }
+                setTimeout(()=>{
+                    // PagingFooter 초기화
+                    if (response) {
+                        this.postCardProps = response.data.page.result;
+                        this.pagingProps.total = response.data.cnt.result[0].count;
+                    } else {
+                        this.pagingProps.total = 0;          // 글 전체 개수
+                    }
 
-                if (this.pagingProps.current == 0) this.pagingProps.current = 1;
+                    if (this.pagingProps.current == 0) this.pagingProps.current = 1;
+                    
+                    this.isSearching = false;
+                },100);
+
             }).catch((e)=>{
                 console.error(e);
+                this.isSearching = false;
             });
         },
         searchPage: function(value) {
@@ -227,5 +242,11 @@ export default {
     height: 60px;
     padding: 10px 0;
     text-align: center;
+}
+
+@media (max-width: 767px) {
+    div.search-form-broke {
+        margin-top: 15px;
+    }
 }
 </style>

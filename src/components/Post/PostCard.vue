@@ -5,9 +5,10 @@
                 <div class="row g-0">
                 <div class="col-md-4">
                     <div class="image-grid-row">
-                        <img class="image-grid-col" src="../../assets/images/node.png" alt="...">
-                        <img class="image-grid-col" src="../../assets/images/mysql.png" alt="...">
-                        <img class="image-grid-col" src="../../assets/images/node.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/DBeaver.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/DBeaver.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/DBeaver.png" alt="...">
+                        <img class="image-grid-col" src="../../assets/images/DBeaver.png" alt="...">
                     </div>
                 </div>
                 <div class="col-md-8">

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header class="fix-top"/>
-    <router-view />
+    <router-view class="container" style="min-width: 360px;"/>
     <Footer class="footer dev-hidden"/>
   </div>
 </template>
